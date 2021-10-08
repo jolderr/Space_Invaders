@@ -196,7 +196,6 @@ public class MainWindow
 				//increase x-holder to set location for next enemy
 				if(r == 1) { addEnemy_helper(x); x += 155; }
 				else { x += 155; }
-			rnd = null;
 			}
 		}
 		
