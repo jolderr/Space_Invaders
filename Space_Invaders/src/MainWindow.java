@@ -15,9 +15,10 @@ import javax.swing.*;
 /**
  * Class to represent the game screen
  * */
-public class MainWindow {
-	public class updateThread implements Runnable {
-		
+public class MainWindow
+{
+	public class updateThread implements Runnable
+	{
 		private final Object pauseLock = new Object();
 		
 		KeyListener keyOver = new KeyListener() {
@@ -26,7 +27,8 @@ public class MainWindow {
 			* @param KeyEvent Object 
 			* @Override
 			* */
-			public void keyPressed(KeyEvent e) {
+			public void keyPressed(KeyEvent e)
+			{
 				background.removeAll();		//remove all elements on background display (game-over and score JLabel)
 				Insets inset = background.getInsets();
 				Dimension size = userIcon.getPreferredSize();
@@ -59,7 +61,8 @@ public class MainWindow {
 		/**
 		 * Method to constantly update figures on screen
 		 * */
-		public void run() {
+		public void run()
+		{
 			int x = 0;	//counter
 			while(true) {
 				//cause a delay in loop, pauses thread
@@ -70,7 +73,8 @@ public class MainWindow {
 						System.out.println("Thread interrupted: " + e);	//system output thread interrupted
 					}
 				}
-				hit();	//call method  to keep track of when a bullet hits an icon
+				hit();			// call method  to keep track of when a bullet hits an icon
+				
 				//causes delay in enemy spawning
 				if(x == 60) { addEnemy(); x = 0; }
 				else {x++;}
@@ -78,10 +82,12 @@ public class MainWindow {
 			}
 		}
 		
+
 		/**
 		 * method to check for if bullet has hit an enemy
 		 * */
-		public void hit() {
+		public void hit()
+		{
 			//for each enemy on screen
 			for(int i = 0; i < enyAL.size(); i++) {
 				Area AE = new Area(enyAL.get(i).getBounds());		//create an area of the enemy
@@ -106,9 +112,18 @@ public class MainWindow {
 		 * Method to track bullet movement
 		 * @Override
 		 * */
-		public void update() {
+		public void update()
+		{
 			//moves bullet JLabels
-			for(int i = 0; i < bltAL.size(); i++) { bltAL.get(i).setLocation(bltAL.get(i).getX(), bltAL.get(i).getY() - 30); }
+			for(int i = 0; i < bltAL.size(); i++) 
+			{
+				bltAL.get(i).setLocation(bltAL.get(i).getX(), bltAL.get(i).getY() - 30);
+				if (bltAL.get(i).getY() <= 10)
+				{
+					background.remove(bltAL.get(i));
+					bltAL.remove(i);
+				}
+			}
 			
 			//moves enemy JLabels and checks for game loss scenario
 			for(int i = 0; i < enyAL.size(); i++) {
@@ -124,7 +139,8 @@ public class MainWindow {
 		/**
 		 * helper method called whenever user loses game (enemy reaches end of screen)
 		 * */
-		public void lose() {
+		public void lose()
+		{
 			Insets inset = background.getInsets();
 			Dimension size = GameOver.getPreferredSize();
 			
@@ -167,7 +183,8 @@ public class MainWindow {
 		/**
 		 * Helper Method to add enemies to the screen
 		 * */
-		public void addEnemy() {
+		public void addEnemy()
+		{
 			Random rnd = new Random();
 			int r = -1;	//random number holder
 			int x = 40;	//x-coordinate holder
@@ -179,13 +196,15 @@ public class MainWindow {
 				//increase x-holder to set location for next enemy
 				if(r == 1) { addEnemy_helper(x); x += 155; }
 				else { x += 155; }
+			rnd = null;
 			}
 		}
 		
 		/**
 		 * Helper Method for addEnemy() method
 		 * */
-		public void addEnemy_helper(int _x) {
+		public void addEnemy_helper(int _x)
+		{
 			Enemy Eny = new Enemy();	//create new enemy instance to get it's enemy JLabel
 			enyAL.add(Eny.label);		//add enemy JLabel to array list 
 			background.add(Eny.label);	//add JLabel to background for it to be displayed
@@ -195,7 +214,10 @@ public class MainWindow {
 			
 			//set bounds for label (size and location)
 			Eny.label.setBounds(_x + inset.left, inset.right, size.width, size.height);
+			
 		}
+		
+		
 	}
 	
 	updateThread t1;			//thread tracks updates
@@ -219,7 +241,8 @@ public class MainWindow {
 	/**
 	 * Default Constructor
 	 * */
-	public MainWindow() {
+	public MainWindow()
+	{
 		t1 = new updateThread();
 		thread = new Thread(t1);
 		Game = new JFrame();
@@ -236,7 +259,8 @@ public class MainWindow {
 	/**
 	 * Method to initialize game window
 	 * */
-	public void init() {
+	public void init()
+	{
 		Game.setSize(1600, 1047);	//set window dimensions
 		Game.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
@@ -268,13 +292,15 @@ public class MainWindow {
 		displayScore.setForeground(Color.MAGENTA);
 		
 		//key listener to take in keyboard commands while game is running
-		keyMain = new KeyListener() {
+		keyMain = new KeyListener()
+		{
 			/**
 			 * Method called when key is pressed
 			 * @param KeyEvent Object 
 			 * @Override
 			 * */
-				public void keyPressed(KeyEvent e) {
+				public void keyPressed(KeyEvent e)
+				{
 						//user hits the "up-arrow" key
 						//user icon moves accordingly
 						if(KeyEvent.getKeyText(e.getKeyCode()) == "Up") { 
@@ -309,12 +335,13 @@ public class MainWindow {
 							Bullet bullet = new Bullet();	//create bullet instance
 							bltAL.add(bullet.label);		//add bullet JLabel to Array List
 							background.add(bullet.label);	//add bullet JLabel to background for it to be displayed
-							
+
 							Insets inset = background.getInsets();
 							Dimension size = bullet.label.getPreferredSize();
 							
 							//set bounds for label (size and location)
 							bullet.label.setBounds(userIcon.getX() + (userIcon.getWidth()/2) - 11 + inset.left, (userIcon.getY() - 113) + inset.right, size.width, size.height);
+
 						}
 		}
 			/**
