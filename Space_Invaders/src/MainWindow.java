@@ -7,9 +7,13 @@ import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.geom.Area;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Random;
+
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 
 /**
@@ -76,7 +80,7 @@ public class MainWindow
 				hit();			// call method  to keep track of when a bullet hits an icon
 				
 				//causes delay in enemy spawning
-				if(x == 60) { addEnemy(); x = 0; }
+				if(x == 120) { addEnemy(); x = 0; }
 				else {x++;}
 				update();	//method call to move all JLabels
 			}
@@ -118,10 +122,12 @@ public class MainWindow
 			for(int i = 0; i < bltAL.size(); i++) 
 			{
 				bltAL.get(i).setLocation(bltAL.get(i).getX(), bltAL.get(i).getY() - 30);
+				
+				// checks if bullets have gone off-screen
 				if (bltAL.get(i).getY() <= 10)
 				{
-					background.remove(bltAL.get(i));
-					bltAL.remove(i);
+					background.remove(bltAL.get(i));	// remove image from background
+					bltAL.remove(i);					// remove bullet image from list
 				}
 			}
 			
@@ -340,6 +346,13 @@ public class MainWindow
 							
 							//set bounds for label (size and location)
 							bullet.label.setBounds(userIcon.getX() + (userIcon.getWidth()/2) - 11 + inset.left, (userIcon.getY() - 113) + inset.right, size.width, size.height);
+							
+							try {
+								bullet.play();
+							} catch (Exception e1) {
+								System.out.println("Error with playing bullet sound");
+								e1.printStackTrace();
+							}
 
 						}
 		}
