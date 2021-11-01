@@ -14,13 +14,6 @@ public class Enemy {
 	 * Default Constructor
 	 * */
 	public Enemy() {
-		setImage();	//calls helper to set JLabel
-	}
-	
-	/**
-	 * Helper method for setting class's JLabel label
-	 * */
-	public void setImage() {
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
 		URL imgURL = getClass().getResource("/resources/enemy.png");	//grabs image from resources folder
 		Image image = toolkit.getImage(imgURL);
